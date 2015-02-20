@@ -1,7 +1,6 @@
 import java.util.Stack;
 import java.util.ArrayList;
 import java.util.Collection;
-//cat
 public class playGame {
 	public static void main (String [] args){
 		Game g1;
