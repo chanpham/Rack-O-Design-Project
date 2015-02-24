@@ -1,0 +1,25 @@
+import java.awt.*;
+
+import javax.swing.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Master extends JFrame {
+	MainWindow main;
+	PlayerWindow player1;
+	
+	Master(String title){
+		super(title);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		BoxLayout boxLayout = new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS);
+		setLayout(boxLayout);
+		main = new MainWindow();
+		player1 = new PlayerWindow(1);
+		add(main);
+		//add(player1);
+	}
+	public static void main(String[]args){
+		Master test = new Master("Rack-O");
+	}
+}
