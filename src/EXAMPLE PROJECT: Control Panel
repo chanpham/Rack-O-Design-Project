@@ -1,0 +1,170 @@
+import java.awt.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
+
+public class ControlPanel extends JPanel
+{
+	JLabel sides;
+	JLabel angles;
+	JLabel calculate1;
+	JLabel calculate2;
+	JLabel calculate3;
+	
+	JTextField sideA;
+	JTextField sideB;
+	JTextField sideC;
+	JTextField angleA;
+	JTextField angleB;
+	JTextField angleC;
+	double sideAd;
+	double sideBd;
+	double sideCd;
+	double angleAd;
+	double angleBd;
+	double angleCd;
+	JButton area;
+	JButton perim;
+	JToggleButton circumcircle;
+	JToggleButton incircle;
+	JToggleButton excircles;
+	JToggleButton ninepointcircle;
+	JToggleButton medians;
+	JToggleButton anglebisectors;
+	JToggleButton altitudes;
+	
+	JButton go;
+	JButton clear;
+	JButton zoomIn;
+	JButton zoomOut;
+	JLabel display;
+	
+	ControlPanel(MasterClass a)
+	{
+		super();
+		setLayout(new GridLayout(0,5));
+		sides = new JLabel("Side Lengths:");
+		angles = new JLabel("Angles (in degrees)");
+		calculate1 = new JLabel("");
+		calculate2 = new JLabel("");
+		calculate3 = new JLabel("");
+		sideA = new JTextField("");
+		sideB = new JTextField("");
+		sideC = new JTextField("");
+		angleA = new JTextField("");
+		angleB = new JTextField("");
+		angleC = new JTextField("");
+		go = new JButton("Go");
+		clear = new JButton("Clear");
+		area = new JButton("Area");
+		perim = new JButton("Perimeter");
+		circumcircle = new JToggleButton("Circumcircle");
+		incircle = new JToggleButton("Incircle");
+		excircles = new JToggleButton("Excircles");
+		ninepointcircle = new JToggleButton("Nine Point Circle");
+		medians = new JToggleButton("Medians");
+		anglebisectors = new JToggleButton("Angle Bisectors");
+		altitudes = new JToggleButton("Altitudes");
+		zoomIn = new JButton("Zoom In");
+		zoomOut = new JButton("Zoom Out");
+		display = new JLabel("");
+		
+		add(sides);
+		add(angles);
+		add(calculate1);
+		add(calculate2);
+		add(calculate3);
+		
+		add(sideA);
+		add(angleA);
+		add(area);
+		add(perim);
+		add(circumcircle);
+		
+		add(sideB);
+		add(angleB);
+		add(incircle);
+		add(excircles);
+		add(ninepointcircle);
+
+		add(sideC);
+		add(angleC);
+		add(medians);
+		add(anglebisectors);
+		add(altitudes);
+		
+		add(go);
+		add(clear);
+		add(zoomIn);
+		add(zoomOut);
+		add(display);
+		setVisible(true);
+		
+		go.addActionListener(a);
+		clear.addActionListener(a);
+		area.addActionListener(a);
+		perim.addActionListener(a);
+		circumcircle.addActionListener(a);
+		incircle.addActionListener(a);
+		excircles.addActionListener(a);
+		ninepointcircle.addActionListener(a);
+		medians.addActionListener(a);
+		anglebisectors.addActionListener(a);
+		altitudes.addActionListener(a);
+		zoomIn.addActionListener(a);
+		zoomOut.addActionListener(a);
+		
+		go.setActionCommand("go");
+		clear.setActionCommand("clear");
+		area.setActionCommand("area");
+		perim.setActionCommand("perim");
+		zoomIn.setActionCommand("zoomIn");
+		zoomOut.setActionCommand("zoomOut");
+		}
+
+
+		public void clear()
+		{
+			sideA.setText("");
+			sideB.setText("");
+			sideC.setText("");
+			angleA.setText("");
+			angleB.setText("");
+			angleC.setText("");
+		}
+		
+		public double[] doubleConvert()
+		{	
+			double[] values = new double[6];
+			if (!sideA.getText().equals(""))
+			{
+				values[0] = Double.parseDouble(sideA.getText());
+			}
+			if (!sideB.getText().equals(""))
+			{
+				values[1] = Double.parseDouble(sideB.getText());
+			}
+			if (!sideC.getText().equals(""))
+			{
+				values[2] = Double.parseDouble(sideC.getText());
+			}
+			if (!angleA.getText().equals(""))
+			{
+				values[3] = Double.parseDouble(angleA.getText());
+			}
+			if (!angleB.getText().equals(""))
+			{
+				values[4] = Double.parseDouble(angleB.getText());
+			}
+			if (!angleC.getText().equals(""))
+			{
+				values[5] = Double.parseDouble(angleC.getText());
+			}
+			return values;
+		}
+		
+}
+
+
