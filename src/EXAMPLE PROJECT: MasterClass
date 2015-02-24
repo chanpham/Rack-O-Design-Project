@@ -1,0 +1,252 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+public class MasterClass extends JFrame implements ActionListener
+{
+	ControlPanel contPan;
+	DrawPanel drawPan;
+	boolean flip;
+	boolean[] previousTBD;
+	boolean previousArea;
+	boolean previousPerim;
+	
+	MasterClass(String title)
+	{
+		super(title);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+		BoxLayout boxLayout = new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS);
+		setLayout(boxLayout);
+		contPan = new ControlPanel(this);
+		drawPan = new DrawPanel();
+		drawPan.setMinimumSize(new Dimension(1200,500));
+		drawPan.setPreferredSize(new Dimension(1200,600));
+		drawPan.setMaximumSize(new Dimension(1200,700));
+
+		previousTBD = new boolean[8]; //Each of these store the previous button states,
+		previousArea = false; //So we can find out which button has just been pressed
+		previousPerim = false;
+		setVisible(true);
+		setSize(1200,800);
+		add(drawPan);
+		add(contPan);
+	}
+	
+	public void actionPerformed(ActionEvent evt)
+	{
+		if (evt.getActionCommand().equals("clear")) //resets the whole masterclass
+		{
+			drawPan.clear();
+			contPan.clear();
+			contPan.circumcircle.setSelected(false);
+			contPan.incircle.setSelected(false);
+			contPan.excircles.setSelected(false);
+			contPan.ninepointcircle.setSelected(false);
+			contPan.medians.setSelected(false);
+			contPan.anglebisectors.setSelected(false);
+			contPan.altitudes.setSelected(false);
+			contPan.display.setText("");
+		}
+		if (evt.getActionCommand().equals("go"))
+		{
+			contPan.circumcircle.setSelected(false);
+			contPan.incircle.setSelected(false);
+			contPan.excircles.setSelected(false);
+			contPan.ninepointcircle.setSelected(false);
+			contPan.medians.setSelected(false);
+			contPan.anglebisectors.setSelected(false);
+			contPan.altitudes.setSelected(false);
+			
+			double[] values = contPan.doubleConvert();
+			
+				for(int i=0; i<3; i++)
+			{
+				drawPan.data.sideLengths[i] = values[i];
+				drawPan.data.angles[i] = Math.PI*values[3+i]/180;
+			}
+			boolean enoughInfo = drawPan.data.completeSA();
+			if(!enoughInfo)
+			{
+				contPan.display.setText("<html><body>Not enough information, or it's impossible! <br>Try again.");
+			}
+			else
+			{
+				drawPan.setInitialScaleFactor();
+				drawPan.toBeDrawn[0] = true;
+				contPan.display.setText("");
+
+				contPan.sideA.setText(""+Math.round(drawPan.data.sideLengths[0]*1000)/1000.0);
+				contPan.sideB.setText(""+Math.round(drawPan.data.sideLengths[1]*1000)/1000.0);
+				contPan.sideC.setText(""+Math.round(drawPan.data.sideLengths[2]*1000)/1000.0);
+				contPan.angleA.setText(""+Math.round(1000*180*drawPan.data.angles[0]/Math.PI)/1000.0);
+				contPan.angleB.setText(""+Math.round(1000*180*drawPan.data.angles[1]/Math.PI)/1000.0);
+				contPan.angleC.setText(""+Math.round(1000*180*drawPan.data.angles[2]/Math.PI)/1000.0);
+				repaint();
+			}
+		}
+		if(evt.getActionCommand().equals("zoomIn"))
+		{
+			drawPan.zoomIn();
+			repaint();
+		}
+		if(evt.getActionCommand().equals("zoomOut"))
+		{
+			drawPan.zoomOut();
+			repaint();
+		}
+
+		if (evt.getActionCommand().equals("area"))
+		{
+			contPan.display.setText("Area = " + Math.round(drawPan.data.area()*1000)/1000.0);
+		}
+		if (evt.getActionCommand().equals("perim"))
+		{
+			contPan.display.setText("Perimeter = " + Math.round(drawPan.data.perim()*1000)/1000.0);
+		}
+		
+		if (contPan.circumcircle.isSelected())
+		{
+			drawPan.toBeDrawn[1] = true;
+			drawPan.data.circumcircle();
+			contPan.circumcircle.setForeground(Color.BLUE);
+		}
+		if (!contPan.circumcircle.isSelected())
+		{
+			drawPan.toBeDrawn[1] = false;
+			contPan.circumcircle.setForeground(Color.BLACK);
+		}
+		
+		if (contPan.incircle.isSelected())
+		{
+			drawPan.toBeDrawn[2] = true;
+			drawPan.data.incircle();
+			contPan.incircle.setForeground(Color.BLUE);
+		}
+		if (!contPan.incircle.isSelected())
+		{
+			drawPan.toBeDrawn[2] = false;
+			contPan.incircle.setForeground(Color.BLACK);
+		}
+		
+		if (contPan.excircles.isSelected())
+		{
+			drawPan.toBeDrawn[3] = true;
+			drawPan.data.Aexcircle();
+			drawPan.data.Bexcircle();
+			drawPan.data.Cexcircle();
+			contPan.excircles.setForeground(Color.BLUE);
+		}
+		if (!contPan.excircles.isSelected())
+		{
+			drawPan.toBeDrawn[3] = false;
+			contPan.excircles.setForeground(Color.BLACK);
+		}
+		if (contPan.ninepointcircle.isSelected())
+		{
+			drawPan.toBeDrawn[4] = true;
+			drawPan.data.ninepointcircle();
+			contPan.ninepointcircle.setForeground(Color.BLUE);
+		}
+		if (!contPan.ninepointcircle.isSelected())
+		{
+			drawPan.toBeDrawn[4] = false;
+			contPan.ninepointcircle.setForeground(Color.BLACK);
+		}
+		
+		if (contPan.medians.isSelected())
+		{
+			drawPan.toBeDrawn[5] = true;
+			drawPan.data.medianLength();
+			contPan.medians.setForeground(Color.GREEN);
+		}	
+		if (!contPan.medians.isSelected())
+		{
+			drawPan.toBeDrawn[5] = false;
+			contPan.medians.setForeground(Color.BLACK);
+		}
+		
+		if (contPan.anglebisectors.isSelected())
+		{
+			drawPan.toBeDrawn[6] = true;
+			drawPan.data.anglebisectLength();
+			contPan.anglebisectors.setForeground(Color.MAGENTA);
+		}
+		if (!contPan.anglebisectors.isSelected())
+		{
+			drawPan.toBeDrawn[6] = false;
+			contPan.anglebisectors.setForeground(Color.BLACK);
+		}
+		
+		if (contPan.altitudes.isSelected())
+		{
+			drawPan.toBeDrawn[7] = true;
+			drawPan.data.height();
+			contPan.altitudes.setForeground(Color.ORANGE);
+		}
+		if (!contPan.altitudes.isSelected())
+		{
+			drawPan.toBeDrawn[7] = false;
+			contPan.altitudes.setForeground(Color.BLACK);
+		}
+		repaint();
+		
+		//Now we find the most recently clicked button, by comparing the new toBeDrawn[] to the most recent toBeDrawn[]
+		boolean stuffThere = false;
+		//that boolean is to make sure it wasn't just cleared
+		for(int i=1; i<8; i++)
+		{
+			if(drawPan.toBeDrawn[i])
+				stuffThere = true;
+		}
+		int mostRecent = 9;
+		if(stuffThere)
+		{
+			//after that, if there is stuff in the array, we play "Spot the Difference"
+			for(int i=1; i<8; i++)
+			{
+				if((!previousTBD[i])&&drawPan.toBeDrawn[i])
+					mostRecent = i;
+			}
+		}
+		repaint();
+		
+		//Based on what's most recent, we print that data, rounded to the thousandths.
+		if(mostRecent==1)
+			contPan.display.setText("Circumradius = " + Math.round(drawPan.data.circumcircle[2]*1000)/1000.0);
+		if(mostRecent==2)
+			contPan.display.setText("Inradius = " + Math.round(drawPan.data.incircle[2]*1000)/1000.0);
+		if(mostRecent==3)
+			contPan.display.setText("<html><body>Exradius 1: " + Math.round(drawPan.data.Aexcircle[2]*1000)/1000.0 + "<br>Exradius 2: " + Math.round(drawPan.data.Bexcircle[2]*1000)/1000.0 + "<br>Exradius 3: " + Math.round(drawPan.data.Cexcircle[2]*1000)/1000.0 + "</body></html>"); 
+		if(mostRecent==4)
+			contPan.display.setText("Nine Point Radius = " + Math.round(drawPan.data.ninepointcircle[2]*1000)/1000.0);
+		if(mostRecent==5)
+			contPan.display.setText("<html><body>Median 1: " + Math.round(drawPan.data.medianLength[0]*1000)/1000.0 + "<br>Median 2: " + Math.round(drawPan.data.medianLength[1]*1000)/1000.0 + "<br>Median 3: " + Math.round(drawPan.data.medianLength[2]*1000)/1000.0 + "</body></html>"); 		
+		if(mostRecent==6)
+			contPan.display.setText("<html><body>Angle Bisector 1: " + Math.round(drawPan.data.anglebisectLength[0]*1000)/1000.0 + "<br>Angle Bisector 2: " + Math.round(drawPan.data.anglebisectLength[1]*1000)/1000.0 + "<br>Angle Bisector 3: " + Math.round(drawPan.data.anglebisectLength[2]*1000)/1000.0 + "</body></html>");
+		if(mostRecent==7)
+			contPan.display.setText("<html><body>Altitude 1: " + Math.round(drawPan.data.height[0]*1000)/1000.0 + "<br>Altitude 2: " + Math.round(drawPan.data.height[1]*1000)/1000.0 + "<br> Altitude 3: " + Math.round(drawPan.data.height[2]*1000)/1000.0 + "</body></html>"); 
+
+
+		//Then we reassign so currentTBD becomes previousTBD
+		for(int i=1; i<8; i++)
+		{
+			previousTBD[i] = drawPan.toBeDrawn[i];
+		}
+		repaint();
+	}
+	
+	public static void main (String[]args)
+	{
+		MasterClass a = new MasterClass("TriGrapher"); 
+	}	
+}
+
+
