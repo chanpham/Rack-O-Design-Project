@@ -1,0 +1,30 @@
+import java.awt.*;
+
+import javax.swing.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class MainWindow extends JPanel{ 
+	
+	JButton drawPile;
+	JButton discardPile;
+	JLabel scores;
+	
+	
+	MainWindow(){
+		super();
+		setLayout(new GridLayout(2,2)); 
+		setSize(400,400);
+		
+		drawPile = new JButton("DRAW PILE");
+		discardPile = new JButton("DISCARD PILE");
+		scores = new JLabel("Player 1: 0");
+		
+		add(drawPile);
+		add(discardPile);
+		add(scores);
+		setVisible(true);
+	}
+
+}
