@@ -1,0 +1,56 @@
+import java.awt.*;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class PlayerWindow extends JPanel{ 
+	
+	JPanel container;
+	JPanel top;
+	JPanel middle;
+	JPanel bottom;
+	JButton show;
+	JButton hide;
+	JButton[] hand;
+	JTextField blank;
+	JButton card; 
+	Border border;
+	JButton discard;
+	
+	PlayerWindow(int a){
+		super();
+		container = new JPanel();
+		BoxLayout boxLayout = new BoxLayout(this.getRootPane(), BoxLayout.Y_AXIS);
+		container.setLayout(boxLayout);
+		setSize(400,400);
+		
+		show = new JButton("SHOW");
+		hide = new JButton("HIDE");
+		hand = new JButton[10];
+		for (int i=0;i<hand.length;i++){
+			hand[i] = new JButton(""+i);
+		}
+		card = new JButton(""+4);
+		border = BorderFactory.createLineBorder(Color.BLACK, 1);
+		card.setBorder(border);
+		discard = new JButton("TRASH DAT BISH");
+		blank = new JTextField("");
+		
+		top.add(show);
+		top.add(hide);
+		for (int i2=0;i2<hand.length;i2++){
+			middle.add(hand[i2]);
+		}
+		bottom.add(blank);
+		bottom.add(card);
+		bottom.add(discard);
+		
+		container.add(top);
+		container.add(middle);
+		container.add(bottom);
+		setVisible(true);
+	}
+}
